@@ -47,33 +47,6 @@ function init() {
     var line = new THREE.LineSegments( geometry, material );
     scene.add( line );
 
-
-    x = [28.2588, 30.0746, 36.3025, 42.8052, 47.8761, 52.3432, 57.6151, 63.5475, 69.1289, 74.8265, 79.931, 86.177, 89.0149, 93.8196, 100.635, 106.194, 111.714, 123.139, 128.99, 134.565, 140.327, 145.194, 154.099, 155.848, 161.705, 168.087, 179.281, 184.172, 194.813, 199.067, 202.976, 212.922, 218.222, 220.45, 224.57, 239.303, 244.466, 249.058, 263.924, 255.789, 242.616, 242.448, 242.505]
-
-    y = [114.873, 117.073, 122.393, 129.262, 132.528, 136.106, 140.798, 146.331, 152.026, 157.82, 164.176, 170.563, 175.12, 180.289, 187.326, 192.737, 197.836, 210.935, 217.717, 223.593, 230.212, 236.339, 247.148, 249.103, 255.404, 263.247, 277.467, 283.556, 296.633, 301.727, 306.57, 318.898, 324.862, 327.366, 330.613, 343.522, 348.842, 353.683, 370.12, 318.878, 300.068, 300.141, 300.244]
-
-    z = [-8.05111, -7.69075, -7.58149, -6.75371, -6.2317, -5.94001, -5.52248, -5.55702, -5.22401, -4.15805, -3.31618, -2.49574, -1.78443, -0.105879, 4.20596, 5.94571, 7.23719, 9.9411, 11.8348, 11.9705, 13.0656, 14.7029, 17.5228, 17.8717, 18.0709, 19.9709, 22.0203, 23.5826, 26.8027, 27.7695, 28.8479, 32.2673, 32.7009, 34.1674, 34.7817, 36.954, 38.69, 39.1486, 43.0898, 54.5245, 84.8876, 86.5778, 86.7768]
-    var normalize = 209;
-    var i = 0;
-    
-    // for(i=0; i<x.length; i++)
-    // {
-    //     var geometry2 = new THREE.BoxGeometry( 20, 20, 20 );
-
-    //     var material2 = new THREE.MeshBasicMaterial( { color: new THREE.Color(0, 0x000000, 0) } );
-
-
-    //     var cube2 = new THREE.Mesh( geometry2, material2 );
-
-    //     cube2.position.set(x[i], y[i], z[i]);
-
-    //     scene.add( cube2 );
-    // }
-
-
-
-    //
-
     raycaster = new THREE.Raycaster();
     raycaster.params.Points.threshold = threshold;
 
@@ -166,9 +139,11 @@ function render() {
     if (!hand) return;
     
     var extended_fingers = 0;
+    var index = null;
     for (var i=0; i<hand.fingers.length; i++) {  
       var x = hand.fingers[i];
       if (x.extended) extended_fingers += 1;
+      if (x.type = "index") index = x;
     }
 
     if (extended_fingers == pointing && !drawing){
@@ -180,7 +155,7 @@ function render() {
     }
     
     if (drawing) {
-      var finger = hand.pointables[0];
+      var finger = index;
       var currentPosition = renderHelper(finger.tipPosition);
 
       var geometry2 = new THREE.BoxGeometry( 20, 20, 20 );
