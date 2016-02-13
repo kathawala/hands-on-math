@@ -48,19 +48,24 @@ function init() {
     scene.add( line );
 
 
-    var points = [127.584, 133.075, 140.02, 146.755, 152.913, 155.307, 158.666, 163.45, 165.514, 167.98, 168.394, 167.257, 163.742, 158.049, 150.81, 142.305, 131.651, 125.855, 114.138, 100.321, 89.3324, 84.77, 87.0588, 78.2261, 72.4406, 70.761, 71.2394, 73.3089, 76.6018, 81.7407, 92.4125, 94.4069, 100.629, 109.62, 117.106, 125.775, 133.502, 143.509, 153.066, 160.943, 168.158, 175.3, 182.29, 185.566, 191.466, 197.175, 201.725, 204.699, 206.51, 207.634, 208.492, 208.291, 208.132, 206.244, 201.839, 189.343, 185.98, 178.513, 178.513, 160.373, 151.415, 140.594, 129.869, 121.433, 113.028, 105.206, 92.5884, 90.8445, 84.3263, 80.4603, 76.0214, 74.5759, 69.939, 69.5576, 70.7713, 73.1213, 77.6562, 81.6341, 85.2186, 90.441, 102.163, 109.333, 117.102, 125.468, 134.104, 148.74, 155.553, 158.357, 161.275, 171.53, 174.56, 186.765, 192.622, 196.329, 202.075, 204.089, 204.836, 203.334, 201.35, 199.41, 194.839, 189.569, 183.564, 174.377, 165.051, 150.967, 144.126, 139.714, 125.781, 117.217, 101.823, 95.3567, 89.8235, 85.9041, 84.0404, 69.8909, 70.3476, 71.8308, 63.0687, 62.1171, 61.6176, 52.393];
+    x = [28.2588, 30.0746, 36.3025, 42.8052, 47.8761, 52.3432, 57.6151, 63.5475, 69.1289, 74.8265, 79.931, 86.177, 89.0149, 93.8196, 100.635, 106.194, 111.714, 123.139, 128.99, 134.565, 140.327, 145.194, 154.099, 155.848, 161.705, 168.087, 179.281, 184.172, 194.813, 199.067, 202.976, 212.922, 218.222, 220.45, 224.57, 239.303, 244.466, 249.058, 263.924, 255.789, 242.616, 242.448, 242.505]
 
-    var normalize = 200;
+    y = [114.873, 117.073, 122.393, 129.262, 132.528, 136.106, 140.798, 146.331, 152.026, 157.82, 164.176, 170.563, 175.12, 180.289, 187.326, 192.737, 197.836, 210.935, 217.717, 223.593, 230.212, 236.339, 247.148, 249.103, 255.404, 263.247, 277.467, 283.556, 296.633, 301.727, 306.57, 318.898, 324.862, 327.366, 330.613, 343.522, 348.842, 353.683, 370.12, 318.878, 300.068, 300.141, 300.244]
+
+    z = [-8.05111, -7.69075, -7.58149, -6.75371, -6.2317, -5.94001, -5.52248, -5.55702, -5.22401, -4.15805, -3.31618, -2.49574, -1.78443, -0.105879, 4.20596, 5.94571, 7.23719, 9.9411, 11.8348, 11.9705, 13.0656, 14.7029, 17.5228, 17.8717, 18.0709, 19.9709, 22.0203, 23.5826, 26.8027, 27.7695, 28.8479, 32.2673, 32.7009, 34.1674, 34.7817, 36.954, 38.69, 39.1486, 43.0898, 54.5245, 84.8876, 86.5778, 86.7768]
+    var normalize = 209;
     var i = 0;
-    var material2 = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-    for(i=0; i<points.length; i++)
+    
+    for(i=0; i<x.length; i++)
     {
         var geometry2 = new THREE.BoxGeometry( 20, 20, 20 );
+
+        var material2 = new THREE.MeshBasicMaterial( { color: new THREE.Color(0, 0x000000, 0) } );
+
+
         var cube2 = new THREE.Mesh( geometry2, material2 );
 
-        var x = -500+(i*10);
-
-        cube2.position.set(x, points[i], 10);
+        cube2.position.set(x[i], y[i], z[i]);
 
         scene.add( cube2 );
     }
@@ -106,7 +111,7 @@ function init() {
     container.appendChild( stats.domElement );
 
     window.addEventListener( 'resize', onWindowResize, false );
-    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    // document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
 }
 
@@ -119,28 +124,28 @@ function onWindowResize() {
 
 }
 
-function onDocumentMouseMove( event ) {
+// function onDocumentMouseMove( event ) {
 
-   event.preventDefault();
+//    event.preventDefault();
 
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-    // raycaster.setFromCamera( mouse, camera );
+//     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+//     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+//     // raycaster.setFromCamera( mouse, camera );
 
-    // var intersects = raycaster.intersectObjects( objects );
+//     // var intersects = raycaster.intersectObjects( objects );
 
-    // if ( intersects.length > 0 ) {
+//     // if ( intersects.length > 0 ) {
 
-    //     var intersect = intersects[ 0 ];
+//     //     var intersect = intersects[ 0 ];
 
-    //     rollOverMesh.position.copy( intersect.point ).add( intersect.face.normal );
-    //     rollOverMesh.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
+//     //     rollOverMesh.position.copy( intersect.point ).add( intersect.face.normal );
+//     //     rollOverMesh.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
 
-    // }
+//     // }
 
-    render();
+//     render();
 
-}
+// }
 
 function render() {
 
