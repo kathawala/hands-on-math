@@ -28,7 +28,7 @@ function init() {
 
     // grid
 
-    var size = 1000, step = 50;
+  var size = 1000, step = 50;
 
     var geometry = new THREE.Geometry();
 
@@ -158,13 +158,13 @@ function render() {
       var finger = index;
       var currentPosition = renderHelper(finger.tipPosition);
 
-      var geometry2 = new THREE.BoxGeometry( 20, 20, 20 );
+      var geometry2 = new THREE.BoxGeometry( 10, 10, 10 );
       
       var material2 = new THREE.MeshBasicMaterial( { color: new THREE.Color(0, 0x000000, 0) } );
 
       var cube2 = new THREE.Mesh( geometry2, material2 );
       
-      cube2.position.set(currentPosition[0], currentPosition[1], currentPosition[2]);
+      cube2.position.set(currentPosition[0]*(3) - 800, currentPosition[1], currentPosition[2]*2 + 800);
 
       scene.add( cube2 );
       
