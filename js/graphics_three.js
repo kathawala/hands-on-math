@@ -56,19 +56,19 @@ function init() {
     var normalize = 209;
     var i = 0;
     
-    for(i=0; i<x.length; i++)
-    {
-        var geometry2 = new THREE.BoxGeometry( 20, 20, 20 );
+    // for(i=0; i<x.length; i++)
+    // {
+    //     var geometry2 = new THREE.BoxGeometry( 20, 20, 20 );
 
-        var material2 = new THREE.MeshBasicMaterial( { color: new THREE.Color(0, 0x000000, 0) } );
+    //     var material2 = new THREE.MeshBasicMaterial( { color: new THREE.Color(0, 0x000000, 0) } );
 
 
-        var cube2 = new THREE.Mesh( geometry2, material2 );
+    //     var cube2 = new THREE.Mesh( geometry2, material2 );
 
-        cube2.position.set(x[i], y[i], z[i]);
+    //     cube2.position.set(x[i], y[i], z[i]);
 
-        scene.add( cube2 );
-    }
+    //     scene.add( cube2 );
+    // }
 
 
 
@@ -149,6 +149,57 @@ function onWindowResize() {
 
 function render() {
 
-    renderer.render( scene, camera );
+  var options = {enableGestures: true};
 
+  var prevPosition = null;
+
+  var tapped = null;
+
+  var drawing = false;
+
+  var pointing = 1 //represents only index finger extended
+
+  renderer.render( scene, camera );
+
+  var controller = Leap.loop(options, function(frame) {
+    var hand = frame.hands[0];
+    if (!hand) return;
+    
+    var extended_fingers = 0;
+    for (var i=0; i<hand.fingers.length; i++) {  
+      var x = hand.fingers[i];
+      if (x.extended) extended_fingers += 1;
+    }
+
+    if (extended_fingers == pointing && !drawing){
+      console.log("Start");
+      drawing = !drawing;
+    } else if (extended_fingers != pointing && drawing){
+      console.log("Stop");
+      drawing = !drawing;
+    }
+    
+    if (drawing) {
+      var finger = hand.pointables[0];
+      var currentPosition = renderHelper(finger.tipPosition);
+
+      var geometry2 = new THREE.BoxGeometry( 20, 20, 20 );
+      
+      var material2 = new THREE.MeshBasicMaterial( { color: new THREE.Color(0, 0x000000, 0) } );
+
+      var cube2 = new THREE.Mesh( geometry2, material2 );
+      
+      cube2.position.set(currentPosition[0], currentPosition[1], currentPosition[2]);
+
+      scene.add( cube2 );
+      
+      renderer.render( scene, camera );  
+    }
+    
+  });
+
+}
+
+function renderHelper(position) {
+  return position;
 }
