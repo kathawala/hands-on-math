@@ -58,7 +58,7 @@ function init() {
         var geometry2 = new THREE.BoxGeometry( 20, 20, 20 );
         var cube2 = new THREE.Mesh( geometry2, material2 );
 
-        var x = -1000+(i*5);
+        var x = -500+(i*10);
 
         cube2.position.set(x, points[i], 10);
 
@@ -76,11 +76,11 @@ function init() {
 
 
     //var geometry = new THREE.BoxGeometry( 500, 1000, 1000);
-     var geometry = new THREE.BoxGeometry( 2800, 1000, 1000);  // aashna
-    // geometry.rotateX( - Math.PI / 2 );
+    //  var geometry = new THREE.BoxGeometry( 2800, 1000, 1000);  // aashna
+    // // geometry.rotateX( - Math.PI / 2 );
 
-    plane = new THREE.Mesh( geometry, new THREE.LineBasicMaterial( { color: 0xff0000, opacity: 0.2, transparent: true, visible: true } ) );
-    scene.add( plane );
+    // plane = new THREE.Mesh( geometry, new THREE.LineBasicMaterial( { color: 0xff0000, opacity: 0.2, transparent: true, visible: true } ) );
+    // scene.add( plane );
 
     objects.push( plane );
 
