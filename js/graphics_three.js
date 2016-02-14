@@ -148,7 +148,7 @@ function render() {
       //var sphereMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, shading: THREE.FlatShading } );
 
       var cube2 = new THREE.Mesh(geometry2, material2);
-      cube2.position.set(currentPosition[0]*(3)-50, currentPosition[1], currentPosition[2]*2 + 800);
+      cube2.position.set(currentPosition[0]*(3)-50, currentPosition[1], 800);
       currentLine.shapes.push(cube2);
       
       scene.add( cube2 );
