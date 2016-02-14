@@ -11,6 +11,7 @@ var currentLine = {
   points: [],
   shapes: []
 };
+var storeFileURL = "https://www.wolframcloud.com/objects/0a7037b4-26ba-4463-ba10-60f6ec755ea2";
 
 
 var objects = [];
@@ -167,4 +168,34 @@ function render() {
     }
   });
 
+}
+
+function wolframizeNestedArray (points) {
+  var pointString = "";
+  for (var i = 0; i < points.length; i ++) {
+    var point = points[i];
+    var xyzString = "{" + point.toString() + "}"
+    if (pointString == "") xyzString = "{" + xyzString;
+    if (i == points.length-1) xyzString = xyzString + "}"
+    else xyzString = xyzString + ","
+    pointString += xyzString;
+  }
+  return pointString;
+}
+
+document.onkeypress = function (event) {
+  var oEvent = event || window.event, chr = oEvent.keyCode;
+  if ((chr == 0 || chr == 32) && lines.length != 0) { //handle space bar click
+    var line = lines[lines.length-1];
+    line.uuid = guid();
+    var points = line.points;
+    var wolframString = wolframizeNestedArray(points);
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            console.log(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", storeFileURL + "?x=" + encodeURIComponent(wolframString) + "&y=" + encodeURIComponent(line.uuid), true); // true for asynchronous 
+    xmlHttp.send(null);
+  }
 }
