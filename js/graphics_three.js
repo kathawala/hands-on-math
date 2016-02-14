@@ -6,6 +6,7 @@ var plane;
 var mouse, raycaster; 
 var threshold = 0.1;
 var drawing = false;
+var shouldSend = true;
 var lines = [];
 var currentLine = {
   points: [],
@@ -133,6 +134,7 @@ function render() {
 	shapes: []
       }
       drawing = !drawing;
+      shouldSend = true;
     }
     
     if (drawing) {
@@ -200,9 +202,11 @@ function s4() {
 
 document.onkeypress = function (event) {
   var oEvent = event || window.event, chr = oEvent.keyCode;
-  if ((chr == 0 || chr == 32) && lines.length != 0) { //handle space bar click
+  if ((chr == 0 || chr == 32) && lines.length != 0 && shouldSend) { //handle space bar click
+    shouldSend = false;
     var line = lines[lines.length-1];
     line.uuid = guid();
+    console.log(line.uuid);
     var points = line.points;
     var wolframString = wolframizeNestedArray(points);
     var xmlHttp = new XMLHttpRequest();
@@ -212,24 +216,22 @@ document.onkeypress = function (event) {
 	xhr2.onreadystatechange = function() {
 	  if (xhr2.readyState == 4 && xhr2.status == 200) {
 	    var expression = xhr2.responseText;
-	    /////////////////
-
-	    //INSERT EXPRESSION INTO DOM HERE
-	    
-	    /////////////////
+	    var formulabox = document.getElementById("formula");
+	    formulabox.innerHTML = expression;
+	    formulabox.style.left = (formulabox.parentElement.clientWidth - formulabox.width) / 2;
 	    console.log(expression);
-	    var xhr3 = new XMLHttpRequest();
-	    xhr3.onreadystatechange = function() {
-	      if (xhr3.readyState == 4 && xhr3.status == 200) {
-		var linePlot = xhr3.responseText;
-		////////////////
+	    // var xhr3 = new XMLHttpRequest();
+	    // xhr3.onreadystatechange = function() {
+	    //   if (xhr3.readyState == 4 && xhr3.status == 200) {
+	    // 	var linePlot = xhr3.responseText;
+	    // 	////////////////
 
-		// Parse the wolfram back to javascript array of points here and then plot
+	    // 	// Parse the wolfram back to javascript array of points here and then plot
 		
-		////////////////
-		console.log(linePlot);
-	      }
-	    }
+	    // 	////////////////
+	    // 	console.log(linePlot);
+	    //   }
+	    // }
 	  }
 	}
 	xhr2.open("GET", readFunctionURL + "?p=" + encodeURIComponent(line.uuid), true);
