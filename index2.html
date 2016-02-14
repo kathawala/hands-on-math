@@ -3,15 +3,27 @@
     <head>
         <title>sketch.js &raquo; THREE.js Example</title>
         <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         <link href="//fonts.googleapis.com/css?family=Roboto:400,100,400italic,700italic,700" rel="stylesheet" type="text/css">
     </head>
     <body>
+
       <div id = "container">
-      <div id = "formula">Formula</div></div>
+        <div id = "rd1">
+          <input type="radio" name="radio" id="radio1" class="radio" checked/>
+          <label for="radio1">Linear </label>
+        </div>
+
+        <div id = "rd2">
+          <input type="radio" name="radio" id="radio2" class="radio"/>
+          <label for="radio2">Parabola</label>
+        </div>
+      <div id = "formula">Formula</div>
+    </div>
       <div id="load-bar">
-	<div class="bar"></div>
-	<div class="bar"></div>
-	<div class="bar"></div>
+      	<div class="bar"></div>
+      	<div class="bar"></div>
+      	<div class="bar"></div>
       </div>
       <script src="js/leap-0.6.4.js"></script>
       <script src="js/leap-plugins-0.1.11.js"></script>
@@ -19,7 +31,6 @@
       <script src="js/three.min.js"></script>
       <script src="js/sketch.js"></script>
       <script src="js/Detector.js"></script>
-      <script src="js/stats.min.js"></script>
       <script src="js/graphics_three.js"></script>
     </body>
 </html>

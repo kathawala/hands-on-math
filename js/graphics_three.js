@@ -89,11 +89,6 @@ function init() {
     renderer.setSize( window.innerWidth, window.innerHeight );
     container.appendChild( renderer.domElement );
 
-    stats = new Stats();
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.top = '0px';
-    container.appendChild( stats.domElement );
-
     window.addEventListener( 'resize', onWindowResize, false );
     // document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
