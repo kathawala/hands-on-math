@@ -15,7 +15,13 @@ var currentLine = {
 //x and y params maps to points and filename (uuid)
 var storeFileURL = "https://www.wolframcloud.com/objects/3f9948cd-2b38-4a9a-9a71-9d6da239760c";
 //p param maps to uuid
-var readFunctionURL = "https://www.wolframcloud.com/objects/63476e15-9230-4a9b-adeb-32e06f731fd8";
+// var readFunctionURL = "https://www.wolframcloud.com/objects/63476e15-9230-4a9b-adeb-32e06f731fd8";
+
+//ax+b equations only
+var linearEq = "https://www.wolframcloud.com/objects/41c8f7a3-e6a2-4931-afb6-261485acc26d";
+var parabolaEq = "https://www.wolframcloud.com/objects/c950d335-c580-4115-a4ca-be12593609af";
+
+var readFunctionURL = parabolaEq;
 
 //each point is about 16 characters (two curly braces, 4 commas, 9 digits, 1 space)
 //2000 / 16 = 125
@@ -184,6 +190,10 @@ function wolframizeNestedArray (points) {
   var modulo = maxPoints;
   if (points.length > maxPoints) {
     modulo = dividePoints(points.length);
+    if (modulo == null) {
+      points = getRandomSubarray(points, maxPoints - 20);
+      modulo = maxPoints;
+    }
   }
   for (var i = 0; i < points.length; i ++) {
     if (i < 5 || i > points.length - 5) continue;
@@ -283,6 +293,22 @@ document.onkeypress = function (event) {
 
 // returns modulo to divide by
 function dividePoints (totalNumOfPoints) {
-  return Math.round(totalNumOfPoints / (totalNumOfPoints - maxPoints));
+  var firstTry = Math.round(totalNumOfPoints / (totalNumOfPoints - maxPoints));
+  if (firstTry == 1) {
+    return null;
+  } else {
+    return firstTry;
+  }
   
+}
+
+function getRandomSubarray(arr, size) {
+    var shuffled = arr.slice(0), i = arr.length, temp, index;
+    while (i--) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+    }
+    return shuffled.slice(0, size);
 }
