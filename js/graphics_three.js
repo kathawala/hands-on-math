@@ -155,7 +155,7 @@ function render() {
   });
 
   controller.on('gesture', function(gesture) {
-    if (gesture.type == "swipe" && !drawing) {
+    if (gesture.type == "swipe" && !drawing && gesture.state == 'stop') {
       if (lines.length == 0) return;
       var lastLine = lines[lines.length-1];
       for(var i=0; i<lastLine.shapes.length; i++) {
