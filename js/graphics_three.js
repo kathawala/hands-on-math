@@ -15,7 +15,7 @@ var currentLine = {
 //x and y params maps to points and filename (uuid)
 var storeFileURL = "https://www.wolframcloud.com/objects/3f9948cd-2b38-4a9a-9a71-9d6da239760c";
 //p param maps to uuid
-var readFunctionURL = "https://www.wolframcloud.com/objects/e2b8526b-e848-4adc-9720-2071047189f1";
+var readFunctionURL = "https://www.wolframcloud.com/objects/63476e15-9230-4a9b-adeb-32e06f731fd8";
 
 //each point is about 16 characters (two curly braces, 4 commas, 9 digits, 1 space)
 //2000 / 16 = 125
@@ -190,6 +190,7 @@ function wolframizeNestedArray (points) {
     if (i % modulo == 0) continue;
     var point = points[i];
     point.splice(-1,1);
+    if (point.length != 2) continue;
     for (var j = 0; j < point.length; j++) {
       point[j] = Math.round(point[j]);
     }
