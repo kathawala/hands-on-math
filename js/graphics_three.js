@@ -12,7 +12,7 @@ var currentLine = {
   shapes: []
 };
 //x and y params maps to points and filename (uuid)
-var storeFileURL = "https://www.wolframcloud.com/objects/0a7037b4-26ba-4463-ba10-60f6ec755ea2urle";
+var storeFileURL = "https://www.wolframcloud.com/objects/3f9948cd-2b38-4a9a-9a71-9d6da239760c";
 //p param maps to uuid
 var readFunctionURL = "https://www.wolframcloud.com/objects/e1cf291a-ba0e-4f9b-a1b7-2be629c2bbae";
 
@@ -207,8 +207,35 @@ document.onkeypress = function (event) {
     var wolframString = wolframizeNestedArray(points);
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            console.log(xmlHttp.responseText);
+      if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+	var xhr2 = new XMLHttpRequest();
+	xhr2.onreadystatechange = function() {
+	  if (xhr2.readyState == 4 && xhr2.status == 200) {
+	    var expression = xhr2.responseText;
+	    /////////////////
+
+	    //INSERT EXPRESSION INTO DOM HERE
+	    
+	    /////////////////
+	    console.log(expression);
+	    var xhr3 = new XMLHttpRequest();
+	    xhr3.onreadystatechange = function() {
+	      if (xhr3.readyState == 4 && xhr3.status == 200) {
+		var linePlot = xhr3.responseText;
+		////////////////
+
+		// Parse the wolfram back to javascript array of points here and then plot
+		
+		////////////////
+		console.log(linePlot);
+	      }
+	    }
+	  }
+	}
+	xhr2.open("GET", readFunctionURL + "?p=" + encodeURIComponent(line.uuid), true);
+	xhr2.send(null);
+      }
+      
     }
     xmlHttp.open("GET", storeFileURL + "?x=" + encodeURIComponent(wolframString) + "&y=" + encodeURIComponent(line.uuid), true); // true for asynchronous 
     xmlHttp.send(null);
