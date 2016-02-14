@@ -19,6 +19,7 @@ var storeFileURL = "https://www.wolframcloud.com/objects/3f9948cd-2b38-4a9a-9a71
 //ax+b equations only
 var linearEq = "https://www.wolframcloud.com/objects/41c8f7a3-e6a2-4931-afb6-261485acc26d";
 var parabolaEq = "https://www.wolframcloud.com/objects/c950d335-c580-4115-a4ca-be12593609af";
+var cubicEq = "https://www.wolframcloud.com/objects/bae6c145-ee36-419e-a50e-8309d93b1a1f";
 
 var readFunctionURL = parabolaEq;
 
@@ -305,4 +306,20 @@ function getRandomSubarray(arr, size) {
         shuffled[i] = temp;
     }
     return shuffled.slice(0, size);
+}
+
+document.getElementById("radio1").onclick = function (event) {
+  if (this.checked) {
+    readFunctionURL = linearEq;
+  } else {
+    readFunctionURL = parabolaEq;
+  }
+}
+
+document.getElementById("radio2").onclick = function (event) {
+  if (this.checked) {
+    readFunctionURL = parabolaEq;
+  } else {
+    readFunctionURL = linearEq;
+  }
 }
