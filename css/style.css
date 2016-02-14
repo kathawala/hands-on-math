@@ -1,0 +1,22 @@
+html {
+	font: 100%/1.5 "Roboto", Verdana, sans-serif;
+	text-align: center;
+}
+
+#formula {
+	position: absolute;
+	left: 45%;
+	top: 83%;
+	font-size: 20px;
+    border: 2px solid #f35626;
+    line-height: 1.375;
+    font-weight: 700;
+    color: #f35626;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;    
+    padding-top: .75rem;
+    padding-bottom: .75em;
+    margin: 0 auto;
+    background-color: transparent;
+    border-radius: 4px;
+}
