@@ -1,10 +1,9 @@
-//check isShiftDown??? 
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 var container;
 var camera, scene, renderer;
 var plane;
-var mouse, raycaster, isShiftDown = false; 
+var mouse, raycaster; 
 var threshold = 0.1;
 
 var objects = [];
@@ -68,10 +67,6 @@ function init() {
     // var cube2 = new THREE.Mesh( geometry2, material2 );
     // scene.add( cube2 );
 
-
-
-
-
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setClearColor( 0xf0f0f0 );
     renderer.setPixelRatio( window.devicePixelRatio );
@@ -97,39 +92,12 @@ function onWindowResize() {
 
 }
 
-// function onDocumentMouseMove( event ) {
-
-//    event.preventDefault();
-
-//     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-//     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-//     // raycaster.setFromCamera( mouse, camera );
-
-//     // var intersects = raycaster.intersectObjects( objects );
-
-//     // if ( intersects.length > 0 ) {
-
-//     //     var intersect = intersects[ 0 ];
-
-//     //     rollOverMesh.position.copy( intersect.point ).add( intersect.face.normal );
-//     //     rollOverMesh.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
-
-//     // }
-
-//     render();
-
-// }
-
 function render() {
 
   var options = {enableGestures: true};
-
   var prevPosition = null;
-
   var tapped = null;
-
   var drawing = false;
-
   var pointing = 1 //represents only index finger extended
 
   renderer.render( scene, camera );
@@ -141,34 +109,37 @@ function render() {
     var extended_fingers = 0;
     var index = null;
     for (var i=0; i<hand.fingers.length; i++) {  
-      var x = hand.fingers[i];
-      if (x.extended) extended_fingers += 1;
-      if (x.type = "index") index = x;
+        var x = hand.fingers[i];
+        if (x.extended) extended_fingers += 1;
+        if (x.type = "index") index = x;
     }
 
     if (extended_fingers == pointing && !drawing){
-      console.log("Start");
-      drawing = !drawing;
+        console.log("Start");
+        drawing = !drawing;
     } else if (extended_fingers != pointing && drawing){
-      console.log("Stop");
-      drawing = !drawing;
+        console.log("Stop");
+        drawing = !drawing;
     }
     
     if (drawing) {
-      var finger = index;
-      var currentPosition = renderHelper(finger.tipPosition);
+        var finger = index;
+        var currentPosition = renderHelper(finger.tipPosition);
 
-      var geometry2 = new THREE.BoxGeometry( 10, 10, 10 );
+        var geometry2 = new THREE.BoxGeometry( 10, 10, 10 );
       
-      var material2 = new THREE.MeshBasicMaterial( { color: new THREE.Color(0, 0x000000, 0) } );
+        var material2 = new THREE.MeshBasicMaterial( { color: new THREE.Color(0, 0x000000, 0) } );
 
-      var cube2 = new THREE.Mesh( geometry2, material2 );
-      
-      cube2.position.set(currentPosition[0]*(3) - 800, currentPosition[1], currentPosition[2]*2 + 800);
+        //var sphereGeometry = new THREE.SphereGeometry( 0.1, 32, 32 );
+        //var sphereMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, shading: THREE.FlatShading } );
 
-      scene.add( cube2 );
+        var cube2 = new THREE.Mesh(geometry2, material2);
+        cube2.position.set(currentPosition[0]*(3)-50, currentPosition[1], currentPosition[2]*2 + 800);
+
+        //cube2.position.set(currentPosition[0]*(3)-50, currentPosition[1], currentPosition[2]*2 + 800);
+        scene.add( cube2 );
       
-      renderer.render( scene, camera );  
+        renderer.render( scene, camera );  
     }
     
   });
