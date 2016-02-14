@@ -21,14 +21,14 @@ html {
     border-radius: 4px;
 }
 
-.load-bar {
+#load-bar {
   left:25%;
   position: absolute;
   top: 95%;
   width: 50%;
   height: 6px;
   background-color: #fdba2c;
-  display: none;
+  visibility: hidden;
 }
 
 .bar {

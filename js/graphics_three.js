@@ -15,7 +15,11 @@ var currentLine = {
 //x and y params maps to points and filename (uuid)
 var storeFileURL = "https://www.wolframcloud.com/objects/3f9948cd-2b38-4a9a-9a71-9d6da239760c";
 //p param maps to uuid
-var readFunctionURL = "https://www.wolframcloud.com/objects/e1cf291a-ba0e-4f9b-a1b7-2be629c2bbae";
+var readFunctionURL = "https://www.wolframcloud.com/objects/e2b8526b-e848-4adc-9720-2071047189f1";
+
+//each point is about 16 characters (two curly braces, 4 commas, 9 digits, 1 space)
+//2000 / 16 = 125
+var maxPoints = 135;
 
 
 var objects = [];
@@ -150,7 +154,7 @@ function render() {
       //var sphereMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, shading: THREE.FlatShading } );
 
       var cube2 = new THREE.Mesh(geometry2, material2);
-      cube2.position.set(currentPosition[0]*(3)-50, currentPosition[1], 800);
+      cube2.position.set(currentPosition[0]*(3)-50, currentPosition[1], 900);
       currentLine.shapes.push(cube2);
       
       scene.add( cube2 );
@@ -177,15 +181,27 @@ function render() {
 
 function wolframizeNestedArray (points) {
   var pointString = "";
+  var modulo = maxPoints;
+  if (points.length > maxPoints) {
+    modulo = dividePoints(points.length);
+  }
   for (var i = 0; i < points.length; i ++) {
+    if (i < 5 || i > points.length - 5) continue;
+    if (i % modulo == 0) continue;
     var point = points[i];
     point.splice(-1,1);
+    for (var j = 0; j < point.length; j++) {
+      point[j] = Math.round(point[j]);
+    }
     var xyzString = "{" + point.toString() + "}";
     if (pointString == "") xyzString = "{" + xyzString;
-    if (i == points.length-1) xyzString = xyzString + "}"
-    else xyzString = xyzString + ","
     pointString += xyzString;
+    pointString += ",";
   }
+  pointString = pointString + "}"
+  pointString = pointString.replace("},}", "}}");
+  console.log(pointString);
+  console.log(points.length);
   return pointString;
 }
 
@@ -203,6 +219,11 @@ function s4() {
 document.onkeypress = function (event) {
   var oEvent = event || window.event, chr = oEvent.keyCode;
   if ((chr == 0 || chr == 32) && lines.length != 0 && shouldSend) { //handle space bar click
+    var loadbar = document.getElementById("load-bar");
+    var formulabox = document.getElementById("formula");
+    formulabox.style.color = "#F7D5CB";
+    formulabox.style.border = "2px solid #F7D5CB";
+    loadbar.style.visibility = "visible";
     shouldSend = false;
     var line = lines[lines.length-1];
     line.uuid = guid();
@@ -216,10 +237,11 @@ document.onkeypress = function (event) {
 	xhr2.onreadystatechange = function() {
 	  if (xhr2.readyState == 4 && xhr2.status == 200) {
 	    var expression = xhr2.responseText;
-	    var formulabox = document.getElementById("formula");
+	    loadbar.style.visibility = "hidden";
+	    formulabox.style.color = "#f35626";
+	    formulabox.style.border = "2px solid #f35626";
 	    formulabox.innerHTML = expression;
-	    formulabox.style.left = (formulabox.parentElement.clientWidth - formulabox.width) / 2;
-	    console.log(expression);
+	    formulabox.style.left = ((formulabox.parentElement.clientWidth - formulabox.clientWidth) / 2) + "px";
 	    // var xhr3 = new XMLHttpRequest();
 	    // xhr3.onreadystatechange = function() {
 	    //   if (xhr3.readyState == 4 && xhr3.status == 200) {
@@ -232,14 +254,34 @@ document.onkeypress = function (event) {
 	    // 	console.log(linePlot);
 	    //   }
 	    // }
+	  } else if (xhr2.status == 414 || xhr2.status == 400) {
+	    var expression = "Yikes! Server Error :(";
+	    loadbar.style.visibility = "hidden";
+	    formulabox.style.color = "#f35626";
+	    formulabox.style.border = "2px solid #f35626";
+	    formulabox.innerHTML = expression;
+	    formulabox.style.left = (formulabox.parentElement.clientWidth - formulabox.clientWidth) / 2;
 	  }
 	}
 	xhr2.open("GET", readFunctionURL + "?p=" + encodeURIComponent(line.uuid), true);
 	xhr2.send(null);
+      } else if (xmlHttp.status == 414 || xmlHttp.status == 400) {
+	var expression = "Yikes! Server Error :(";
+	loadbar.style.visibility = "hidden";
+	formulabox.style.color = "#f35626";
+	formulabox.style.border = "2px solid #f35626";
+	formulabox.innerHTML = expression;
+	formulabox.style.left = (formulabox.parentElement.clientWidth - formulabox.clientWidth) / 2;
       }
       
     }
     xmlHttp.open("GET", storeFileURL + "?x=" + encodeURIComponent(wolframString) + "&y=" + encodeURIComponent(line.uuid), true); // true for asynchronous 
     xmlHttp.send(null);
   }
+}
+
+// returns modulo to divide by
+function dividePoints (totalNumOfPoints) {
+  return Math.round(totalNumOfPoints / (totalNumOfPoints - maxPoints));
+  
 }
