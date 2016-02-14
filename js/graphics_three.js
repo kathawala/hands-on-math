@@ -11,7 +11,10 @@ var currentLine = {
   points: [],
   shapes: []
 };
-var storeFileURL = "https://www.wolframcloud.com/objects/0a7037b4-26ba-4463-ba10-60f6ec755ea2";
+//x and y params maps to points and filename (uuid)
+var storeFileURL = "https://www.wolframcloud.com/objects/0a7037b4-26ba-4463-ba10-60f6ec755ea2urle";
+//p param maps to uuid
+var readFunctionURL = "https://www.wolframcloud.com/objects/e1cf291a-ba0e-4f9b-a1b7-2be629c2bbae";
 
 
 var objects = [];
@@ -174,13 +177,25 @@ function wolframizeNestedArray (points) {
   var pointString = "";
   for (var i = 0; i < points.length; i ++) {
     var point = points[i];
-    var xyzString = "{" + point.toString() + "}"
+    point.splice(-1,1);
+    var xyzString = "{" + point.toString() + "}";
     if (pointString == "") xyzString = "{" + xyzString;
     if (i == points.length-1) xyzString = xyzString + "}"
     else xyzString = xyzString + ","
     pointString += xyzString;
   }
   return pointString;
+}
+
+function guid() {
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
+
+function s4() {
+  return Math.floor((1 + Math.random()) * 0x10000)
+    .toString(16)
+    .substring(1);
 }
 
 document.onkeypress = function (event) {
