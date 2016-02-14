@@ -13,8 +13,6 @@ var currentLine = {
 };
 //x and y params maps to points and filename (uuid)
 var storeFileURL = "https://www.wolframcloud.com/objects/3f9948cd-2b38-4a9a-9a71-9d6da239760c";
-//p param maps to uuid
-// var readFunctionURL = "https://www.wolframcloud.com/objects/63476e15-9230-4a9b-adeb-32e06f731fd8";
 
 //ax+b equations only
 var linearEq = "https://www.wolframcloud.com/objects/41c8f7a3-e6a2-4931-afb6-261485acc26d";
@@ -44,10 +42,6 @@ function init() {
 
 
     scene = new THREE.Scene();
-    // var sphereGeometry = new THREE.SphereGeometry( 0.1, 32, 32 );
-    // var sphereMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, shading: THREE.FlatShading } );
-
-    // grid
 
   var size = 1000, step = 50;
 
@@ -73,21 +67,7 @@ function init() {
 
     mouse = new THREE.Vector2();
 
-
-    //var geometry = new THREE.BoxGeometry( 500, 1000, 1000);
-    //  var geometry = new THREE.BoxGeometry( 2800, 1000, 1000);  // aashna
-    // // geometry.rotateX( - Math.PI / 2 );
-
-    // plane = new THREE.Mesh( geometry, new THREE.LineBasicMaterial( { color: 0xff0000, opacity: 0.2, transparent: true, visible: true } ) );
-    // scene.add( plane );
-
     objects.push( plane );
-
-
-    // var geometry2 = new THREE.BoxGeometry( 200, 200, 300 );
-    // var material2 = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-    // var cube2 = new THREE.Mesh( geometry2, material2 );
-    // scene.add( cube2 );
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setClearColor( 0xf0f0f0 );
@@ -96,7 +76,6 @@ function init() {
     container.appendChild( renderer.domElement );
 
     window.addEventListener( 'resize', onWindowResize, false );
-    // document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
 }
 
@@ -151,9 +130,6 @@ function render() {
       
       var material2 = new THREE.MeshBasicMaterial( { color: new THREE.Color(0, 0x000000, 0) } );
 
-      //var sphereGeometry = new THREE.SphereGeometry( 0.1, 32, 32 );
-      //var sphereMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, shading: THREE.FlatShading } );
-
       var cube2 = new THREE.Mesh(geometry2, material2);
       cube2.position.set(currentPosition[0]*(3)-50, currentPosition[1], 900);
       currentLine.shapes.push(cube2);
@@ -168,11 +144,13 @@ function render() {
   controller.on('gesture', function(gesture) {
     if (gesture.type == "swipe" && !drawing && gesture.state == 'stop') {
       if (lines.length == 0) return;
-      var lastLine = lines[lines.length-1];
-      for(var i=0; i<lastLine.shapes.length; i++) {
-	var index = lines.indexOf(lastLine);
-	if (index > -1) lines.splice(index, 1);
-	scene.remove( lastLine.shapes[i] );
+      for(var j=0; j<lines.length; j++){
+	var lastLine = lines[j];
+	for(var i=0; i<lastLine.shapes.length; i++) {
+	  var index = lines.indexOf(lastLine);
+	  if (index > -1) lines.splice(index, 1);
+	  scene.remove( lastLine.shapes[i] );
+	}
       }
       renderer.render( scene, camera );
     }
@@ -206,8 +184,6 @@ function wolframizeNestedArray (points) {
   }
   pointString = pointString + "}"
   pointString = pointString.replace("},}", "}}");
-  console.log(pointString);
-  console.log(points.length);
   return pointString;
 }
 
@@ -233,7 +209,6 @@ document.onkeypress = function (event) {
     shouldSend = false;
     var line = lines[lines.length-1];
     line.uuid = guid();
-    console.log(line.uuid);
     var points = line.points;
     var wolframString = wolframizeNestedArray(points);
     var xmlHttp = new XMLHttpRequest();
@@ -243,23 +218,34 @@ document.onkeypress = function (event) {
 	xhr2.onreadystatechange = function() {
 	  if (xhr2.readyState == 4 && xhr2.status == 200) {
 	    var expression = xhr2.responseText;
+	    var evalexpr = expression.replace("^2", "*x");
 	    loadbar.style.visibility = "hidden";
 	    formulabox.style.color = "#f35626";
 	    formulabox.style.border = "2px solid #f35626";
 	    formulabox.innerHTML = expression;
 	    formulabox.style.left = ((formulabox.parentElement.clientWidth - formulabox.clientWidth) / 2) + "px";
-	    // var xhr3 = new XMLHttpRequest();
-	    // xhr3.onreadystatechange = function() {
-	    //   if (xhr3.readyState == 4 && xhr3.status == 200) {
-	    // 	var linePlot = xhr3.responseText;
-	    // 	////////////////
+	    var max = Math.max(line.points[0][0], line.points[line.points.length-1][0]);
+	    var min = Math.min(line.points[0][0], line.points[line.points.length-1][0]);
+	    var currentLine = {
+	      shapes: []
+	    }
+	    for (var x = min; x < max; x++ ){
+	      var y = eval(evalexpr);
+	      var geometry2 = new THREE.BoxGeometry( 10, 10, 10 );
+	      
+	      var material2 = new THREE.MeshBasicMaterial( { color: new THREE.Color(0, 0xff0000, 0) } );
 
-	    // 	// Parse the wolfram back to javascript array of points here and then plot
-		
-	    // 	////////////////
-	    // 	console.log(linePlot);
-	    //   }
-	    // }
+	      var cube2 = new THREE.Mesh(geometry2, material2);
+	      var point = 
+	      cube2.position.set((x*3) - 50, y, 900);
+	      currentLine.shapes.push(cube2);
+	      
+	      scene.add( cube2 );
+	      
+	      renderer.render( scene, camera );
+
+	    }
+	    lines.push(currentLine);
 	  } else if (xhr2.status == 414 || xhr2.status == 400) {
 	    var expression = "Yikes! Server Error :(";
 	    loadbar.style.visibility = "hidden";
