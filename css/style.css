@@ -11,7 +11,7 @@ html {
     border: 2px solid #f35626;
     line-height: 1.375;
     font-weight: 700;
-    color: #f35626;
+    color: #f35626;	/*F7D5CB*/
     padding-left: 1.5rem;
     padding-right: 1.5rem;    
     padding-top: .75rem;
@@ -19,4 +19,41 @@ html {
     margin: 0 auto;
     background-color: transparent;
     border-radius: 4px;
+}
+
+.load-bar {
+  left:25%;
+  position: absolute;
+  top: 95%;
+  width: 50%;
+  height: 6px;
+  background-color: #fdba2c;
+  display: none;
+}
+
+.bar {
+  content: "";
+  display: inline;
+  position: absolute;
+  width: 0;
+  height: 100%;
+  left: 50%;
+  text-align: center;
+}
+.bar:nth-child(1) {
+  background-color: #da4733;
+  animation: loading 3s linear infinite;
+}
+.bar:nth-child(2) {
+  background-color: #3b78e7;
+  animation: loading 3s linear 1s infinite;
+}
+.bar:nth-child(3) {
+  background-color: #fdba2c;
+  animation: loading 3s linear 2s infinite;
+}
+@keyframes loading {
+    from {left: 50%; width: 0;z-index:100;}
+    33.3333% {left: 0; width: 100%;z-index: 10;}
+    to {left: 0; width: 100%;}
 }
